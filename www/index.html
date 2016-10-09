@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="css/style.css">
     <script>
         ons.bootstrap()
-            .controller('AppController', function()
+            .controller('AppController', function($scope)
             {
                 this.items = [
                 {
@@ -39,6 +39,60 @@
                     "image": "http://placekitten.com/50/80"
                 }];
                 
+                this.Msg = ""
+                this.loading = false
+                
+                this.sendMessage = function() {
+                    
+                    this.loading = true
+                    
+                    if(this.Msg != ""){
+                    this.items.push({
+                        "user": "fuga",
+                        "message": this.Msg,
+                        "image": "http://placekitten.com/50/80"
+                    })}
+                
+                    Sleep(0.5);
+                
+                    this.Msg = ""
+                    this.loading = false
+                }
+                
+                this.showDialog = function()
+                {
+                    console.log("AAA!");
+                    if (this.dialog)
+                    {
+                        this.dialog.show();
+                    }
+                    else
+                    {
+                        ons.createDialog('dialog.html',
+                            {
+                                parentScope: $scope
+                            })
+                            .then(function(dialog)
+                            {
+                                this.dialog = dialog;
+                                dialog.show();
+                            }.bind(this));
+                    }
+                }.bind(this);
+                
+                function Sleep(T)
+                {
+                    var d1 = new Date()
+                        .getTime();
+                    var d2 = new Date()
+                        .getTime();
+                    while (d2 < d1 + 1000 * T)
+                    { //T秒待つ 
+                        d2 = new Date()
+                            .getTime();
+                    }
+                    return;
+                }
                 
             });
         ons.ready(function()
@@ -61,23 +115,31 @@
                 <div class="center">Chat Apprication</div>
             </ons-toolbar>
             <section style="padding: 10px">
-                <ons-list-header>Chat Messages</ons-list-header>
+                <ons-list-header>Chat Messages {{Msg}}</ons-list-header>
                 <ons-list-item ng-repeat="item in app.items">
                     <div class="left" ng-if="item.user == 'hoge'"> <img class="list__item__thumbnail" src="{{ item.image }}"> </div>
                     <div class="right" ng-if="item.user != 'hoge'"> <img class="list__item__thumbnail" src="{{ item.image }}"> </div>
                     <div class="center"> <span class="list__item__subtitle">{{ item.user }}</span><span class="list__item__title"> {{ item.message }}</span> </div>
                 </ons-list-item>
+                <ons-progress-bar indeterminate ng-show="app.loading"></ons-progress-bar>
+                test {{Msg}} {{loading}}
             </section>
-            <ons-tabbar position="bottom">
-                <ons-tab class="left">
-                        <ons-icon icon="md-plus"></ons-icon>  </ons-button>
-                </ons-tab>
-                <ons-tab class="right">
-                    <ons-icon icon="md-plus"></ons-icon>
-                </ons-tab>
-            </ons-tabbar>
+            <ons-tabbar position="bottom"> 
+                <span class="left"><ons-icon style="padding: 10px" icon="md-plus"></ons-icon></span>
+                <span class="center"><ons-input id="message" type="data" modifier="underbar" placeholder="input message" ng-model="app.Msg" float style="padding: 10px"></ons-input></span> 
+                <span class="right"><ons-button modifier="quite" ng-click="app.sendMessage()">send</ons-button></span> </ons-tabbar>
         </ons-page>
     </ons-template>
-</body>
+    <ons-dialog var="dialog">
+  <div style="text-align: center; padding: 10px;">
+    <p>
+      This is a dialog.
+    </p>
 
+    <p>
+      <ons-button ng-click="dialog.hide()">Close</ons-button>
+    </p>
+  </div>
+</ons-dialog>
+</body>
 </html>
