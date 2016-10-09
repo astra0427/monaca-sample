@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <script src="components/loader.js"></script>
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/onsenui/js/onsenui.min.js"></script>
+    <script src="lib/onsenui/js/angular-onsenui.min.js"></script>
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        ons.bootstrap()
+            .controller('AppController', function()
+            {
+                this.items = [
+                {
+                    "user": "hoge",
+                    "message": "おはようございます",
+                    "image": "http://placekitten.com/110/80"
+                },
+                {
+                    "user": "fuga",
+                    "message": "Good Morning!!!",
+                    "image": "http://placekitten.com/50/80"
+                },
+                {
+                    "user": "hoge",
+                    "message": "左右にわけるのどうやるの？",
+                    "image": "http://placekitten.com/110/80"
+                },
+                {
+                    "user": "fuga",
+                    "message": "ダサいけどng-ifを使えばいける",
+                    "image": "http://placekitten.com/50/80"
+                }];
+                
+                
+            });
+        ons.ready(function()
+        {
+            console.log("Onsen UI is ready!");
+        });
+    </script>
+</head>
+
+<body>
+    <ons-page>
+        <ons-navigator var="navi" page="page.html" ng-controller="AppController as app" ons-postpush="app.pushes = app.pushes + 1" ons-postpop="app.pops = app.pops + 1"> </ons-navigator>
+    </ons-page>
+    <ons-template id="page.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-back-button>Back</ons-back-button>
+                </div>
+                <div class="center">Chat Apprication</div>
+            </ons-toolbar>
+            <section style="padding: 10px">
+                <ons-list-header>Chat Messages</ons-list-header>
+                <ons-list-item ng-repeat="item in app.items">
+                    <div class="left" ng-if="item.user == 'hoge'"> <img class="list__item__thumbnail" src="{{ item.image }}"> </div>
+                    <div class="right" ng-if="item.user != 'hoge'"> <img class="list__item__thumbnail" src="{{ item.image }}"> </div>
+                    <div class="center"> <span class="list__item__subtitle">{{ item.user }}</span><span class="list__item__title"> {{ item.message }}</span> </div>
+                </ons-list-item>
+            </section>
+            <ons-tabbar position="bottom">
+                <ons-tab class="left">
+                        <ons-icon icon="md-plus"></ons-icon>  </ons-button>
+                </ons-tab>
+                <ons-tab class="right">
+                    <ons-icon icon="md-plus"></ons-icon>
+                </ons-tab>
+            </ons-tabbar>
+        </ons-page>
+    </ons-template>
+</body>
+
+</html>
